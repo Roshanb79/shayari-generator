@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Shayari Studio</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&family=Poppins:wght@300;500&display=swap" rel="stylesheet">
+
+<style>
+  body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: #0f0f0f;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+  }
+
+  h2 {
+    margin-bottom: 10px;
+  }
+
+  textarea {
+    width: 320px;
+    height: 120px;
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    margin-bottom: 10px;
+    outline: none;
+  }
+
+  input {
+    margin-bottom: 10px;
+  }
+
+  .controls {
+    margin-bottom: 15px;
+  }
+
+  .card {
+    width: 420px;
+    padding: 20px;
+    border-radius: 16px;
+    background: linear-gradient(145deg, #1a1a1a, #000000);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+  }
+
+  .header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+
+  .profile-img {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 12px;
+    border: 2px solid #444;
+  }
+
+  .username {
+    font-weight: 500;
+  }
+
+  .handle {
+    font-size: 13px;
+    color: #aaa;
+  }
+
+  .shayari {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    line-height: 1.7;
+    margin-top: 10px;
+    white-space: pre-line;
+  }
+
+  button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 5px;
+    font-weight: 500;
+  }
+
+  .btn-primary {
+    background: #2563eb;
+    color: white;
+  }
+
+  .btn-secondary {
+    background: #444;
+    color: white;
+  }
+
+  .light {
+    background: #ffffff;
+    color: #000;
+  }
+
+  .light .card {
+    background: #fff;
+    color: #000;
+  }
+
+  .light .handle {
+    color: #555;
+  }
+
+</style>
+</head>
+
+<body>
+
+<h2>Shayari Studio ✍️</h2>
+
+<div class="controls">
+  <input type="file" id="imageInput"><br>
+  <textarea id="inputText" placeholder="Write your shayari..."></textarea><br>
+
+  <button class="btn-primary" onclick="generate()">Generate</button>
+  <button class="btn-secondary" onclick="download()">Download</button>
+  <button class="btn-secondary" onclick="toggleTheme()">Toggle Theme</button>
+</div>
+
+<div class="card" id="card">
+
+  <div class="header">
+    <img id="profileImage" class="profile-img" src="profile.jpg">
+    <div>
+      <div class="username" id="username">unka_shayar</div>
+      <div class="handle" id="handle">@unka_shayar</div>
+    </div>
+  </div>
+
+  <div class="shayari" id="outputText">
+    Your words will appear here...
+  </div>
+
+</div>
+
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
+<script>
+
+function generate() {
+  const text = document.getElementById("inputText").value;
+  document.getElementById("outputText").innerText = text;
+}
+
+// Image Upload
+document.getElementById("imageInput").addEventListener("change", function(e) {
+  const reader = new FileReader();
+  reader.onload = function(event) {
+    document.getElementById("profileImage").src = event.target.result;
+  };
+  reader.readAsDataURL(e.target.files[0]);
+});
+
+// Download
+function download() {
+  html2canvas(document.getElementById("card")).then(canvas => {
+    const link = document.createElement("a");
+    link.download = "shayari.png";
+    link.href = canvas.toDataURL();
+    link.click();
+  });
+}
+
+// Theme Toggle
+function toggleTheme() {
+  document.body.classList.toggle("light");
+}
+
+</script>
+
+</body>
+</html>
