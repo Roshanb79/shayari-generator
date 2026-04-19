@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <title>Shayari Studio</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&family=Poppins:wght@300;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&family=Poppins:wght@300;500&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
   body {
@@ -44,8 +44,9 @@
     width: 420px;
     padding: 20px;
     border-radius: 16px;
-    background: linear-gradient(145deg, #1a1a1a, #000000);
-    box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+    background: #1a1a1a;
+    box-shadow: none;
+    border: 1px solid #333;
   }
 
   .header {
@@ -73,9 +74,9 @@
   }
 
   .shayari {
-    font-family: 'Playfair Display', serif;
-    font-size: 22px;
-    line-height: 1.7;
+    font-family: 'Roboto', sans-serif;
+    font-size: 24px;
+    line-height: 1.6;
     margin-top: 10px;
     white-space: pre-line;
   }
@@ -107,6 +108,8 @@
   .light .card {
     background: #fff;
     color: #000;
+    box-shadow: none;
+    border: 1px solid #e1e8ed;
   }
 
   .light .handle {
@@ -123,6 +126,11 @@
 <div class="controls">
   <input type="file" id="imageInput"><br>
   <textarea id="inputText" placeholder="Write your shayari..."></textarea><br>
+  <label for="fontSize">Font Size:</label>
+  <input type="range" id="fontSize" min="12" max="40" value="22"><br>
+  <label>Download Theme:</label>
+  <input type="radio" name="downloadTheme" value="light" checked> Light
+  <input type="radio" name="downloadTheme" value="dark"> Dark<br>
 
   <button class="btn-primary" onclick="generate()">Generate</button>
   <button class="btn-secondary" onclick="download()">Download</button>
@@ -163,13 +171,51 @@ document.getElementById("imageInput").addEventListener("change", function(e) {
   reader.readAsDataURL(e.target.files[0]);
 });
 
+// Font Size Control
+document.getElementById("fontSize").addEventListener("input", function() {
+  document.getElementById("outputText").style.fontSize = this.value + "px";
+});
+
 // Download
 function download() {
-  html2canvas(document.getElementById("card")).then(canvas => {
+  const selectedTheme = document.querySelector('input[name="downloadTheme"]:checked').value;
+  const wasLight = document.body.classList.contains("light");
+  let themeChanged = false;
+  
+  if (selectedTheme === "light" && !wasLight) {
+    document.body.classList.add("light");
+    themeChanged = true;
+  } else if (selectedTheme === "dark" && wasLight) {
+    document.body.classList.remove("light");
+    themeChanged = true;
+  }
+  
+  const card = document.getElementById("card");
+  const originalBorder = card.style.border;
+  const originalBackground = card.style.background;
+  card.style.border = "none";
+  card.style.background = selectedTheme === "light" ? "#fff" : "#1a1a1a";
+  
+  const bgColor = selectedTheme === "light" ? "#ffffff" : "#1a1a1a";
+  
+  html2canvas(card, { backgroundColor: bgColor }).then(canvas => {
     const link = document.createElement("a");
     link.download = "shayari.png";
     link.href = canvas.toDataURL();
     link.click();
+    
+    // Restore styles
+    card.style.border = originalBorder;
+    card.style.background = originalBackground;
+    
+    // Revert theme if it was changed
+    if (themeChanged) {
+      if (selectedTheme === "light") {
+        document.body.classList.remove("light");
+      } else {
+        document.body.classList.add("light");
+      }
+    }
   });
 }
 
