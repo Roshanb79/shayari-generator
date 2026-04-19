@@ -131,6 +131,10 @@
   <label>Download Theme:</label>
   <input type="radio" name="downloadTheme" value="light" checked> Light
   <input type="radio" name="downloadTheme" value="dark"> Dark<br>
+  <label for="usernameInput">Username:</label>
+  <input type="text" id="usernameInput" value="unka_shayar"><br>
+  <label for="handleInput">Handle:</label>
+  <input type="text" id="handleInput" value="@unka_shayar"><br>
 
   <button class="btn-primary" onclick="generate()">Generate</button>
   <button class="btn-secondary" onclick="download()">Download</button>
@@ -174,6 +178,15 @@ document.getElementById("imageInput").addEventListener("change", function(e) {
 // Font Size Control
 document.getElementById("fontSize").addEventListener("input", function() {
   document.getElementById("outputText").style.fontSize = this.value + "px";
+});
+
+// Username and Handle Control
+document.getElementById("usernameInput").addEventListener("input", function() {
+  document.getElementById("username").innerText = this.value;
+});
+
+document.getElementById("handleInput").addEventListener("input", function() {
+  document.getElementById("handle").innerText = this.value;
 });
 
 // Download
